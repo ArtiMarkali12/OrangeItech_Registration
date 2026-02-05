@@ -3,31 +3,30 @@ const Technology = require("../models/technology.model");
 // ➕ Create Technology
 exports.createTechnology = async (req, res, next) => {
   try {
-    const { techId, techName, duration, version } = req.body;
+    const { techName, duration, version } = req.body;
 
-    if (!techId || !techName) {
+    if (!techName) {
       return res.status(400).json({
         success: false,
-        message: "techId and techName are required"
+        message: "techName are required",
       });
     }
 
     const existingTech = await Technology.findOne({
-      $or: [{ techId: techId.trim() }, { techName: techName.trim() }]
+      $or: [{ techName: techName.trim() }],
     });
 
     if (existingTech) {
       return res.status(400).json({
         success: false,
-        message: "Technology with this techId or techName already exists"
+        message: "Technology with this techId or techName already exists",
       });
     }
 
     const technology = await Technology.create({
-      techId: techId.trim(),
       techName: techName.trim(),
       duration: duration?.trim(),
-      version: version?.trim()
+      version: version?.trim(),
     });
 
     res.status(201).json({ success: true, data: technology });
@@ -43,7 +42,7 @@ exports.getTechnologies = async (req, res, next) => {
     res.status(200).json({
       success: true,
       count: technologies.length,
-      data: technologies
+      data: technologies,
     });
   } catch (error) {
     next(error);
@@ -57,7 +56,7 @@ exports.getTechnologyById = async (req, res, next) => {
     if (!technology) {
       return res.status(404).json({
         success: false,
-        message: "Technology not found"
+        message: "Technology not found",
       });
     }
 
@@ -73,13 +72,13 @@ exports.updateTechnology = async (req, res, next) => {
     const updatedTechnology = await Technology.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (!updatedTechnology) {
       return res.status(404).json({
         success: false,
-        message: "Technology not found"
+        message: "Technology not found",
       });
     }
 
@@ -97,13 +96,13 @@ exports.deleteTechnology = async (req, res, next) => {
     if (!deletedTechnology) {
       return res.status(404).json({
         success: false,
-        message: "Technology not found"
+        message: "Technology not found",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: "Technology deleted successfully"
+      message: "Technology deleted successfully",
     });
   } catch (error) {
     next(error);

@@ -4,7 +4,6 @@ const Course = require("../models/course.model");
 exports.createCourse = async (req, res, next) => {
   try {
     const {
-      courseId,
       name,
       feesAmount,
       feesPolicy,
@@ -12,16 +11,15 @@ exports.createCourse = async (req, res, next) => {
       requiredQualification
     } = req.body;
 
-    if (!courseId || !name || feesAmount === undefined || !requiredQualification) {
+    if ( !name || feesAmount === undefined || !requiredQualification) {
       return res.status(400).json({
         success: false,
-        message: "courseId, name, feesAmount and requiredQualification are required"
+        message: " name, feesAmount and requiredQualification are required"
       });
     }
 
     const existingCourse = await Course.findOne({
       $or: [
-        { courseId: courseId.trim() },
         { name: name.trim() }
       ]
     });
@@ -34,7 +32,6 @@ exports.createCourse = async (req, res, next) => {
     }
 
     const course = await Course.create({
-      courseId: courseId.trim(),
       name: name.trim(),
       feesAmount,
       feesPolicy: feesPolicy?.trim(),

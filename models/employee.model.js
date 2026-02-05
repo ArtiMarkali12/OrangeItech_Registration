@@ -23,10 +23,6 @@ const employeeSchema = new mongoose.Schema({
   qualification: {
     type: String
   },
-  deptId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Department"
-  }
 }, { timestamps: true });
 
 module.exports = mongoose.model("Employee", employeeSchema);
